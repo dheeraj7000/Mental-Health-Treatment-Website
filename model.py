@@ -151,4 +151,4 @@ print("ACCURACY OF THE RandomForestClassifier MODEL: ", accuracy*100)
 # ->  ACCURACY OF THE KNN MODEL:  0.7992063492063492
 
 import pickle
-pickle.dump(classifier, open('model.pkl','wb'))
+pickle.dump(classifier, open('t_model.pkl','wb'))

@@ -1,11 +1,19 @@
 from distutils.log import debug
 import pickle
 import numpy as np
+from flask import Flask
+from langchain.chat_models import ChatOpenAI
+from langchain.schema import HumanMessage
+import openai
+import aiapi
+import config
 
-from flask import Flask, render_template, request
-model = pickle.load(open('model.pkl', 'rb'))
+
+from flask import Flask, render_template, request, jsonify
+model = pickle.load(open('t_model.pkl', 'rb'))
 
 app = Flask(__name__)
+app.config.from_object(['development'])
 
 
 @app.route("/", methods=['GET'])
@@ -51,5 +59,21 @@ def predict():
         return render_template('predict.html',prediction=pred)
 
 
+@app.route("/query", methods=['POST','GET'])
+def query_open_ai():
+    
+    if request.method == 'POST':
+        prompt = request.form['prompt']
+        
+        res = {}
+        res['answer'] = aiapi.generateChatResponse(prompt)
+        return jsonify(res), 200
+    
+    return render_template('query.html', **locals())
+    
+    
+
+    
+    
 if __name__ == "__main__":
     app.run(debug=True)
